@@ -14,26 +14,11 @@ export default async function InstitutionsPage() {
     redirect("/auth/login");
   }
 
-  console.log("Current user ID:", data.user.id); // Debug log
-
-  // Try fetching without the created_by filter first to see all institutions
-  const { data: allInstitutions, error: allError } = await supabase
-    .from('institutions')
-    .select('*')
-    .order('created_at', { ascending: false });
-
-  console.log("All institutions:", allInstitutions); // Debug log
-  console.log("All institutions error:", allError); // Debug log
-
-  // Now fetch with the filter
-  const { data: institutions, error: institutionsError } = await supabase
+  const { data: institutions } = await supabase
     .from('institutions')
     .select('*')
     .eq('created_by', data.user.id)
     .order('created_at', { ascending: false });
-
-  console.log("User institutions:", institutions); // Debug log
-  console.log("User institutions error:", institutionsError); // Debug log
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -43,12 +28,6 @@ export default async function InstitutionsPage() {
           <p className="text-muted-foreground">
             Manage your registered institutions
           </p>
-          {/* Debug info */}
-          <div className="text-xs text-muted-foreground mt-2">
-            User ID: {data.user.id}<br/>
-            Total institutions in DB: {allInstitutions?.length || 0}<br/>
-            Your institutions: {institutions?.length || 0}
-          </div>
         </div>
         <Button asChild>
           <Link href="/protected/institutions/new">
@@ -81,9 +60,6 @@ export default async function InstitutionsPage() {
                 <p className="text-sm text-muted-foreground mb-4 line-clamp-3">
                   {institution.description || 'No description provided'}
                 </p>
-                <div className="text-xs text-muted-foreground mb-4">
-                  Created by: {institution.created_by}
-                </div>
                 <div className="flex gap-2">
                   <Button size="sm" variant="outline" asChild>
                     <Link href={`/protected/institutions/${institution.id}`}>
@@ -110,11 +86,6 @@ export default async function InstitutionsPage() {
             <p className="text-muted-foreground mb-4 text-center">
               Start by creating your first institution to offer services on the platform.
             </p>
-            {/* Debug info */}
-            <div className="text-xs text-muted-foreground mb-4 text-center">
-              Debug: User ID: {data.user.id}<br/>
-              Total in DB: {allInstitutions?.length || 0}, Yours: {institutions?.length || 0}
-            </div>
             <Button asChild>
               <Link href="/protected/institutions/new">
                 <Plus className="mr-2 h-4 w-4" />
