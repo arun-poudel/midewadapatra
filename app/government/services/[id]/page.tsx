@@ -2,7 +2,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Clock, DollarSign, FileText, List, Building2 } from "lucide-react";
+import { ArrowLeft, Clock,  FileText, List, Building2 } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -242,7 +242,8 @@ export default async function ServiceDetailPage({ params }: PageProps) {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <DollarSign className="h-5 w-5" />
+                    {/* <DollarSign className="h-5 w-5" /> */}
+
                     Cost Information (शुल्क सम्बन्धी जानकारी)
                   </CardTitle>
                   <CardDescription>
@@ -252,9 +253,14 @@ export default async function ServiceDetailPage({ params }: PageProps) {
                 <CardContent>
                   <div className="space-y-4">
                     {service.cost?.service_fee && (
-                      <div>
+                      < div>
                         <h4 className="font-medium text-gray-900 mb-2">Service Fee</h4>
-                        <p className="text-gray-600 text-lg font-medium">{service.cost.service_fee}</p>
+                        
+                        <div className="flex gap-4">
+                          <span className="h-4 w-4 text-lg text-gray-400">Rs.</span>
+                          <p className="text-gray-600 text-lg font-medium">{service.cost.service_fee}</p>
+                          
+                        </div>
                       </div>
                     )}
                     {service.cost?.additional_charges && (

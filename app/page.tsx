@@ -1,5 +1,6 @@
 // app/page.tsx
 import Navbar from "@/components/navbar";
+import CategoriesContainer from "@/components/ui/categories-container";
 
 export default function Home() {
   return (
@@ -13,6 +14,7 @@ export default function Home() {
           <p className="text-center text-muted-foreground mt-4">
             Digital Government Services Platform
           </p>
+          <CategoriesContainer/>
         </div>
       </main>
 
