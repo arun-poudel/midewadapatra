@@ -43,9 +43,9 @@ interface Institution {
 }
 
 export default async function DepartmentServicesPage({ params }: PageProps) {
-  const supabase = await createClient();
+  const supabase = await createClient(); // Add await here like in government services
 
-  // Get institution details
+  // Get institution details - same pattern as government services
   const { data: institution }: { data: Institution | null } = await supabase
     .from('institutions')
     .select('id, name, type')
@@ -57,7 +57,7 @@ export default async function DepartmentServicesPage({ params }: PageProps) {
     notFound();
   }
 
-  // Get department details
+  // Get department details - same pattern as government services
   const { data: department }: { data: Department | null } = await supabase
     .from('departments')
     .select('*')
@@ -69,7 +69,7 @@ export default async function DepartmentServicesPage({ params }: PageProps) {
     notFound();
   }
 
-  // Get services for this department
+  // Get services for this department - same pattern as government services
   const { data: services }: { data: Service[] | null } = await supabase
     .from('services')
     .select(`

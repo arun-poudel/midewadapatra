@@ -58,9 +58,9 @@ const getDepartmentImage = (departmentName: string): string => {
 };
 
 export default async function DistrictPage({ params }: PageProps) {
-  const supabase = await createClient();
+  const supabase = await createClient(); // Add await here like in government services
 
-  // Get institution details
+  // Get institution details - same pattern as government services
   const { data: institution }: { data: Institution | null } = await supabase
     .from('institutions')
     .select('*')
@@ -73,7 +73,7 @@ export default async function DistrictPage({ params }: PageProps) {
     notFound();
   }
 
-  // Get departments for this institution
+  // Get departments for this institution - same pattern as government services
   const { data: departments }: { data: Department[] | null } = await supabase
     .from('departments')
     .select('*')
