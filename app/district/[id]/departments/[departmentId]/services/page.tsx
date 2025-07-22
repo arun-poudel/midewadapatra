@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Clock,  FileText, List } from "lucide-react";
+import { ArrowLeft, Clock, FileText, List } from "lucide-react";
 import Link from "next/link";
 
 interface PageProps {
@@ -118,7 +118,12 @@ export default async function DepartmentServicesPage({ params }: PageProps) {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {services.map((service) => (
-                <ServiceCard key={service.id} service={service} />
+                <ServiceCard 
+                  key={service.id} 
+                  service={service} 
+                  institutionId={params.id}
+                  departmentId={params.departmentId}
+                />
               ))}
             </div>
           </>
@@ -137,7 +142,15 @@ export default async function DepartmentServicesPage({ params }: PageProps) {
 }
 
 // Service Card Component
-function ServiceCard({ service }: { service: Service }) {
+function ServiceCard({ 
+  service, 
+  institutionId, 
+  departmentId 
+}: { 
+  service: Service; 
+  institutionId: string;
+  departmentId: string;
+}) {
   return (
     <Card className="hover:shadow-lg transition-shadow cursor-pointer">
       <CardHeader>
@@ -169,7 +182,6 @@ function ServiceCard({ service }: { service: Service }) {
           {service.cost?.service_fee && (
             <div className="flex items-center gap-2 text-sm">
               <span className="h-4 w-4 text-gray-400">₨</span>
-
               <span className="text-gray-600">Fee: {service.cost.service_fee}</span>
             </div>
           )}
@@ -193,7 +205,7 @@ function ServiceCard({ service }: { service: Service }) {
 
         <div className="mt-4 space-y-2">
           <Button asChild className="w-full">
-            <Link href={`/government/services/${service.id}`}>
+            <Link href={`/district/${institutionId}/departments/${departmentId}/services/${service.id}`}>
               View Service Details
             </Link>
           </Button>
