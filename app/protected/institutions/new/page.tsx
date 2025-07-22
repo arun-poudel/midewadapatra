@@ -102,7 +102,7 @@ export default function NewInstitutionPage() {
                     <SelectItem value="government">Government Office</SelectItem>
                     <SelectItem value="ward">Ward</SelectItem>
                     <SelectItem value="municipality">Municipality</SelectItem>
-                    <SelectItem value="district">District Administration </SelectItem>
+                    <SelectItem value="District Administration">District Administration </SelectItem>
                     <SelectItem value="bank">Bank</SelectItem>
                     <SelectItem value="hospital">Hospital</SelectItem>
                     <SelectItem value="school">School/University</SelectItem>

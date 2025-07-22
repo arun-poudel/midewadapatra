@@ -35,8 +35,13 @@ const wardDepartmentImages: { [key: string]: string } = {
   'death': '/images/legal.png',
   'elderly': '/images/administration.png',
   'general': '/images/administration.png',
+  'social': '/images/administration.png',
+  'health': '/images/administration.png',
+  'education': '/images/administration.png',
+  'fallback': '/images/rupandehi.png', // fallback
 };
 
+// Function to get image based on department name for ward
 const getWardDepartmentImage = (departmentName: string): string => {
   const lowerName = departmentName.toLowerCase();
   
@@ -48,15 +53,23 @@ const getWardDepartmentImage = (departmentName: string): string => {
     return wardDepartmentImages.death;
   } else if (lowerName.includes('elderly') || lowerName.includes('ज्येष्ठ')) {
     return wardDepartmentImages.elderly;
-  } else {
+  } else if (lowerName.includes('general') || lowerName.includes('सामान्य')) {
     return wardDepartmentImages.general;
+  } else if (lowerName.includes('social') || lowerName.includes('सामाजिक')) {
+    return wardDepartmentImages.social;
+  } else if (lowerName.includes('health') || lowerName.includes('स्वास्थ्य')) {
+    return wardDepartmentImages.health;
+  } else if (lowerName.includes('education') || lowerName.includes('शिक्षा')) {
+    return wardDepartmentImages.education;
+  } else {
+    return wardDepartmentImages.fallback;
   }
 };
 
 export default async function WardPage({ params }: PageProps) {
   const supabase = await createClient();
 
-  // Get institution details
+  // Get institution details - specifically for ward type
   const { data: institution }: { data: Institution | null } = await supabase
     .from('institutions')
     .select('*')
@@ -69,7 +82,7 @@ export default async function WardPage({ params }: PageProps) {
     notFound();
   }
 
-  // Get departments for this institution
+  // Get departments for this ward institution
   const { data: departments }: { data: Department[] | null } = await supabase
     .from('departments')
     .select('*')
@@ -100,11 +113,35 @@ export default async function WardPage({ params }: PageProps) {
       {/* Departments Grid */}
       <div className="container mx-auto px-4 py-12">
         {departments && departments.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {departments.map((department) => (
-              <WardDepartmentCard key={department.id} department={department} institutionId={params.id} />
-            ))}
-          </div>
+          <>
+            {/* Desktop Layout */}
+            <div className="hidden lg:block">
+              <div className="grid grid-cols-4 gap-4 mb-4">
+                {/* Top Row - 4 equal cards */}
+                {departments.slice(0, 4).map((department) => (
+                  <WardDepartmentCard key={department.id} department={department} institutionId={params.id} />
+                ))}
+              </div>
+              
+              {/* Bottom Row - remaining departments */}
+              {departments.length > 4 && (
+                <div className="grid grid-cols-4 gap-4">
+                  {departments.slice(4).map((department, index) => (
+                    <div key={department.id} className={index === 0 ? "col-span-2" : ""}>
+                      <WardDepartmentCard department={department} institutionId={params.id} />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Mobile Layout */}
+            <div className="lg:hidden grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {departments.map((department) => (
+                <WardDepartmentCard key={department.id} department={department} institutionId={params.id} />
+              ))}
+            </div>
+          </>
         ) : (
           <div className="text-center py-16">
             <Building2 className="h-16 w-16 text-gray-400 mx-auto mb-4" />
@@ -135,8 +172,9 @@ function WardDepartmentCard({
             <Image
               src={departmentImage}
               alt={department.name}
-              width={1200}
-              height={800}
+              width={800}
+              height={1200}
+              quality={100}
               className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
             />
           </div>
